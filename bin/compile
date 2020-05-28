@@ -1,0 +1,23 @@
+#!/bin/sh
+
+echo "-----> Install ffmpeg"
+
+# let's define some vars
+BUILD_DIR=$1
+
+# very reliable developer
+DOWNLOAD_URL="https://johnvansickle.com/ffmpeg/releases/ffmpeg-release-amd64-static.tar.xz"
+echo "       DOWNLOAD_URL = ${DOWNLOAD_URL}"
+
+cd $BUILD_DIR
+mkdir vendor
+cd vendor
+mkdir ffmpeg
+curl -L --silent $DOWNLOAD_URL | tar -Jx --strip-components=1 -C ffmpeg/
+
+# let's configure the path and make ffmpeg usable
+
+echo "       exporting PATH"
+PROFILE_PATH="${BUILD_DIR}/.profile.d/ffmpeg.sh"
+mkdir -p "${BUILD_DIR}/.profile.d/"
+echo 'export PATH="/app/vendor/ffmpeg:$PATH"' >> $PROFILE_PATH
